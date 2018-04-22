@@ -30,14 +30,13 @@ class CurriculumInfo(models.Model):
 class Comment(models.Model):
     body = models.TextField('正文', max_length=300)
     created_time = models.DateTimeField('创建时间', default=now)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
-    curriculum = models.ForeignKey(CurriculumInfo, verbose_name='文章', on_delete=models.CASCADE)
+    curriculum = models.CharField(max_length=50)
     parent_comment = models.ForeignKey('self', verbose_name="上级评论", blank=True, null=True, on_delete=models.CASCADE)
     is_enable = models.BooleanField('是否显示', default=True, blank=False, null=False)
 
     class Meta:
-        ordering = ['created_time']
+        ordering = ['-created_time']
         verbose_name = "评论"
         verbose_name_plural = verbose_name
         get_latest_by = 'created_time'

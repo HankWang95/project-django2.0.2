@@ -11,6 +11,7 @@ PLAY_PATH = '/Users/wanghc/Desktop/dev-2.0/mysite/curriculum/upload_dir'
 def play_view(request, series):
     q_list = CurriculumInfo.objects.all().filter(series=series)
     path = []
+    request.session['curriculum_series'] = series
     for obj in q_list:
         path.append(os.path.join(obj.series,obj.file_name))
 
