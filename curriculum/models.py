@@ -23,6 +23,7 @@ class CurriculumInfo(models.Model):
         # permissions 会在数据库创建属于该模块的一个自定义权限
         permissions = (
             ('upload_file', '可以上传文件'),
+            ('move_video', '移动视频所在库'),
         )
 
 

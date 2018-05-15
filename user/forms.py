@@ -41,15 +41,7 @@ class TeacherRegisterForm(UserCreationForm):
             raise forms.ValidationError("请输入正确的手机号码")
         return username
 
-    def clean_id_card(self):
-        id_card = self.cleaned_data['id_card']
-        num_words = len(id_card)
-        if num_words != 18 or not id_card[0:17].isdigit():
-            raise forms.ValidationError("请输入正确的身份证号码")
-        return id_card
 
 
-# 用户详细信息填写界面的表单
-class InfoFillForm(forms.Form):
-    child_age = forms.IntegerField(label='孩子的年龄')
+
 

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import upload, play, comment
+from . import upload, play, comment, move
 
 urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')), django自带的用户表单
@@ -10,5 +10,6 @@ urlpatterns = [
     path('play/', play.play_index_view, name='play_index'),
     path('comment/post_comment/', comment.post_comment_view, name='post_comment'),
     path('comment/', comment.render_comment_view, name='comment'),
-
+    path('move_video_passed/', move.move_video_passed, name='move_video_passed'),
+    path('move_video_unpassed/', move.move_video_unpassed, name='move_video_unpassed'),
 ]
