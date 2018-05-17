@@ -1,15 +1,24 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Comment
+from .models import Series, UnauditedCurriculum
 
 
+# 上传视频文件表单
+class AddCurriculumForm(ModelForm):
+    post_file = forms.FileField(label='请上传.mp4视频文件')
+    post_attachment = forms.FileField(label='请上传附件', required=False)
 
-class UploadForm(forms.Form):
-    grade = forms.CharField(label='年级')
-    series = forms.CharField(label='系列')
-    number = forms.IntegerField(label='该视频为第几集')
-    file = forms.FileField(label='请上传文件')
+    class Meta:
+        model = UnauditedCurriculum
+        fields = ['name', 'number']
 
+
+# 添加系列课程表单
+class AddSeriesForm(ModelForm):
+
+    class Meta:
+        model = Series
+        fields = ['name', 'kind', 'introduce']
 
 
 # 评论表单

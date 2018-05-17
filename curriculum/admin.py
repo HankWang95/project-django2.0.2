@@ -1,6 +1,9 @@
 from django.contrib import admin
-from curriculum.models import CurriculumInfo
-from .move import move_video_passed
+from .models import Series, Curriculum, Comment, KindOfSeries, CurriculumParticipation
 # Register your models here.
 
-admin.site.register(CurriculumInfo)
+admin.site.register(Series)
+admin.site.register(Curriculum)
+admin.site.register(Comment)
+admin.site.register(KindOfSeries)
+admin.site.register(CurriculumParticipation)

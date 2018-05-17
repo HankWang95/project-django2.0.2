@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}系列信息{% endblock %}
+
+{% block content %}
+{% if is_teacher %}
+<a href="{% url 'my_series_list' %}">我的系列课程</a>
+<a href="{% url 'add_series' %}">新建系列课程</a>
+
+{% else %}
+<a href="{% url 'my_series_list' %}">我参加的系列课程</a>
+
+{% endif %}
+
+{% for i in list %}
+<a href="{% url 'play' i.series.id %}">{{ i.name }}</a>
+{% endfor %}
+
+{% endblock %}

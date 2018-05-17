@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import UploadForm
-from .models import CurriculumInfo
-from django.contrib.auth.models import User
+from .forms import AddCurriculumForm, AddSeriesForm
+from .models import Series
 from django.contrib.auth.decorators import permission_required
-import datetime
 import os
 # Create your views here.
 
@@ -19,36 +17,53 @@ def handle_uploaded_file(f, file_name, series):
     with open(os.path.join(path, file_name), 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+    print(path)
     return path
 
 
 # 检测用户是否有上传文件的权限，如果没有返回主页
-@permission_required('curriculum.upload_file',login_url='/')
-# 上传界面
-def upload_view(request):
+@permission_required('curriculum.upload_file', login_url='/')
+# 往系列添加视频界面
+def add_curriculum_view(request, series):
+    series = Series.objects.get(pk=series)
+    if series.owner != request.user:
+        return redirect('my_series_list')
     if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
+        form = AddCurriculumForm(request.POST, request.FILES)
         if form.is_valid():
-            number = str(form.cleaned_data['number'])
-            date = datetime.date.today()
-            owner = User.objects.get(username=request.user.username)
-            series = form.cleaned_data['series']
-            file_name = series + number +request.user.username + str(date) + '.mp4'
-            path = handle_uploaded_file(request.FILES['file'], file_name=file_name, series=series)
-            new_curriculum = CurriculumInfo(date=date,
-                                            owner=owner,
-                                            series=series,
-                                            # TODO:判断上传文件类型后决定如何存储file_name
-                                            file_name=file_name[:-4],
-                                            path=path,
-                                            grade=form.cleaned_data['grade'],
-                                            price=form.cleaned_data['price'],
-                                            number=form.cleaned_data['number']
-                                            )
+            new_curriculum = form.save(commit=False)
+            new_curriculum.owner = request.user
+            new_curriculum.series = series
+            new_curriculum.path = handle_uploaded_file(request.FILES['post_file'],
+                                                       file_name=form.cleaned_data['name'],
+                                                       series=series.name)
+            if request.FILES['post_attachment'] != "" or request.FILES['post_attachment'] is not None:
+                new_curriculum.attachment = handle_uploaded_file(
+                    request.FILES['post_attachment'],
+                    file_name=form.cleaned_data['name']+"-attachment",
+                    series=series.name)
             new_curriculum.save()
-        else:
-            return render(request, 'curriculum/upload.html', {'form': form})
-        return redirect('upload')
+            print("saved!")
+            return redirect('my_series',series.id)
+        print(form)
+        return redirect('add_curriculum',series.id)
     else:
-        form = UploadForm()
-        return render(request, 'curriculum/upload.html', {'form': form})
+        form = AddCurriculumForm()
+
+    return render(request, 'curriculum/add_curriculum.html', {'form': form, 'series': series})
+
+
+# 添加系列课程
+@permission_required('curriculum.upload_file',login_url='/')
+def add_series_view(request):
+    if request.method == 'POST':
+        form = AddSeriesForm(request.POST)
+        if form.is_valid():
+            new_series = form.save(commit=False)
+            new_series.owner = request.user
+            new_series.save()
+            return redirect('my/series/'+new_series.id)
+        return redirect('my_series_list')
+    else:
+        form = AddSeriesForm()
+    return render(request, 'curriculum/add_series.html', {'form': form})

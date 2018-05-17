@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}添加课程{% endblock %}
+
+{% block content %}
+  <h1>请填写课程信息</h1>
+
+  <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="upload">
+  </form>
+{% endblock %}

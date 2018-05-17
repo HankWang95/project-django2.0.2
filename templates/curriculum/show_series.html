@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}加入新系列{% endblock %}
+
+{% block content %}
+{% if joined %}
+<a href="{% url 'my_series' series.id %}">接着学习</a>
+
+joined!
+{% else %}
+<a href="{% url 'join_series' series.id %}">加入学习</a>
+not joined!
+{% endif %}
+<li>{{ series.name }}</li>
+
+
+{% endblock %}

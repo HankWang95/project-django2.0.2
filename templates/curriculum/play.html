@@ -9,8 +9,8 @@
 <script>
 $(document).ready(function(){
     $("button").click(function () {
-        var path=$(this).attr("about")
-        $("#play").load('/play_ajax_obj/'+path);
+        var id=$(this).attr("about")
+        $("#play").load('/play_ajax_obj/'+id);
         });
 });
 </script>
@@ -25,8 +25,8 @@ Your browser does not support the video tag.
 </video>
 
 </div>
-{% for p in path %}
-<button about="{{ p }}" id="but{{ forloop.counter }}">第{{ forloop.counter }}集</button>
+{% for i in list %}
+<button about="{{ i.id }}" id="but{{ forloop.counter }}">{{ i.name }}</button>
 {% endfor %}
 
 {% endblock %}

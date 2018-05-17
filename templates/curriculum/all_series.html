@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}所有课程列表{% endblock %}
+
+{% block content %}
+
+{% for i in series_list %}
+<li><a href="{% url 'show_series' i.id %}">{{ i.name }}</a></li>
+
+{% endfor %}
+{% endblock %}

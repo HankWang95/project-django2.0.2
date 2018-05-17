@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Comment, CurriculumInfo
+from .models import Comment
 from .forms import PostCommentForm
 from django.contrib.auth.decorators import login_required
-import os
 
 
 # 发布评论
