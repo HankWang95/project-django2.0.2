@@ -1,21 +1,5 @@
-{% extends "base.html" %}
-{% block title %}播放界面{% endblock %}
-{% block js %}
-{% load static %}
+{% extends "curriculum/comment.html" %}
 
-<script src="{% static "curriculum/jquery-3.3.1.js" %}"></script>
-
-
-<script>
-$(document).ready(function(){
-    $("button").click(function () {
-        var id=$(this).attr("about")
-        $("#play").load('/play_ajax_obj/'+id);
-        });
-});
-</script>
-
-{% endblock %}
 {% block content %}
 <h1>播放</h1>
 <div id="play">
@@ -25,8 +9,33 @@ Your browser does not support the video tag.
 </video>
 
 </div>
-{% for i in list %}
+{% for i in cur_list %}
 <button about="{{ i.id }}" id="but{{ forloop.counter }}">{{ i.name }}</button>
 {% endfor %}
+
+<div id="msgBox" onload="tab()">
+    <form action="post_comment/" method="post">
+        {% csrf_token %}
+        <h2>来 , 说说你在做什么 , 想什么</h2>
+        <div>{{ comment_form.body }}</div>
+        <div class="tr">
+            <p>
+                <span class="countTxt">还能输入</span><strong class="maxNum">140</strong><span>个字</span>
+
+                <input id="sendBtn" type="submit" value="提交" title="快捷键 Ctrl+Enter" />
+            </p>
+        </div>
+    </form>
+    <div class="list">
+        <h3><span>大家在说</span></h3>
+
+        {% for i in comment_list %}
+        <ul id="ul1">
+
+    {{ i.name }} {{ i.body }} {{ i.time }} {{ i.href }}
+        </ul>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

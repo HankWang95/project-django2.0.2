@@ -22,8 +22,8 @@ urlpatterns = [
     path('play_ajax_obj/<int:id>/', play.play_ajax_obj, name='play_ajax_obj'),
     path('play/<int:series>/', play.play_view, name='play'),
     # path('play/', play.play_index_view, name='play_index'),
-    path('comment/post_comment/', comment.post_comment_view, name='post_comment'),
-    path('comment/', comment.render_comment_view, name='comment'),
+    path('play/<int:series>/post_comment/', comment.post_comment_view, name='post_comment'),
+    # path('play/<int:series>/comment/', comment.render_comment_view, name='comment'),
     # path('move_video_passed/', move.move_video_passed, name='move_video_passed'),
     # path('move_video_unpassed/', move.move_video_unpassed, name='move_video_unpassed'),
 ]

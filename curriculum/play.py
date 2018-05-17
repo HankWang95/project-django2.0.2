@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import FileResponse
-from .models import Curriculum, UnauditedCurriculum, Series
+from .forms import PostCommentForm
+from .models import Curriculum, UnauditedCurriculum, Series, Comment
 import os
 
 # 暂时的测试播放文件夹，迁移时要注意更改
@@ -59,5 +60,17 @@ def play_file_obj(request, id):
 def play_view(request, series):
     s = Series.objects.get(pk=series)
     cur_list = UnauditedCurriculum.objects.all().filter(series=s)
-
-    return render(request, 'curriculum/play.html', {'list': cur_list})
+    comment_list = []
+    comment_form = PostCommentForm()
+    s = Series.objects.get(pk=series)
+    q = Comment.objects.filter(series=s)
+    for i in q:
+        dict = {}
+        dict['name'] = i.author.username
+        dict['body'] = i.body
+        dict['time'] = i.created_time
+        dict['href'] = ""
+        comment_list.append(dict)
+    return render(request, 'curriculum/play.html', {'cur_list': cur_list,
+                                                    'comment_form': comment_form,
+                                                    'comment_list': comment_list})

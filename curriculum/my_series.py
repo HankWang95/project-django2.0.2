@@ -22,7 +22,7 @@ def my_series_view(request, series):
     if Group.objects.get(user=request.user).name == 'teachers':
         series = Series.objects.get(id=series)
         if series.owner != request.user:
-            return redirect('my/series_list/')
+            return redirect('my_series_list')
         else:
             curriculum_list = UnauditedCurriculum.objects.all().filter(series=series)
             return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': True, 'series': series.id})
