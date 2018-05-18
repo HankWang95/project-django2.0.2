@@ -18,7 +18,16 @@ class AddSeriesForm(ModelForm):
 
     class Meta:
         model = Series
-        fields = ['name', 'kind', 'introduce']
+        fields = ['name', 'kind', 'introduce', 'tag']
+
+    def clean_tag(self):
+        tag = self.cleaned_data['tag']
+        if " " in tag:
+            tag_list = tag.split()
+            tag = '#'.join(tag_list)
+            return tag
+        else:
+            return tag
 
 
 # 评论表单

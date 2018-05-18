@@ -10,6 +10,9 @@ class KindOfSeries(models.Model):
     parent_kind = models.ForeignKey('self', blank=True, null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
+
 
 # 系列模型
 class Series(models.Model):
@@ -19,6 +22,7 @@ class Series(models.Model):
     number_of_participants = models.IntegerField(default=0, verbose_name='参加课程人数')
     approval_status = models.BooleanField(default=False)
     introduce = models.CharField(max_length=200, blank=True, null=True, verbose_name='系列简介')
+    tag = models.CharField(max_length=50, blank=True, null=True, verbose_name='标签，空格分割')
 
 
 # 未审核&审核未通过 课程模型

@@ -62,7 +62,7 @@ def add_series_view(request):
             new_series = form.save(commit=False)
             new_series.owner = request.user
             new_series.save()
-            return redirect('my/series/'+new_series.id)
+            return redirect('my_series', new_series.id)
         return redirect('my_series_list')
     else:
         form = AddSeriesForm()
