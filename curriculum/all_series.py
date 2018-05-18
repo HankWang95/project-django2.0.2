@@ -13,14 +13,18 @@ def show_all_series_view(request):
 
 # 展示series的信息，可以加入学习或进入学习
 def show_series_view(request, series):
-    series_id = Series.objects.get(pk=series).id
+    s = Series.objects.get(pk=series)
+    joined = False
     try:
-        _ = CurriculumParticipation.objects.all().filter(student=request.user, series=series)
-        joined = True
+        series_list = CurriculumParticipation.objects.all().filter(student=request.user)
+        for i in series_list:
+            if s == i.series:
+                joined = True
+
     except:
         joined = False
     return render(request, 'curriculum/show_series.html', {
-        'series_id': series_id, 'joined': joined
+        'series': s, 'joined': joined
     })
 
 

@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
 
 {% block title %}欢迎光临首页{% endblock %}
- 
+ {% block js %}
+{% load static %}
+
+<script src="{% static 'curriculum/jquery-3.3.1.js' %}"></script>
+<style>
+    .incenter{
+         -moz-border-radius: 20px;
+        -webkit-border-radius: 20px;
+        border-radius: 20px;
+        background-color: white;
+        opacity: 0.9;
+        padding: 30px;
+            margin: auto;
+        position: relative;
+        top: 120px;
+        display:inline-block;
+          *display:inline;
+          *zoom:1;
+        }
+</style>
+{% endblock %}
 {% block content %}
-{% if request.user.is_active %}
+<img src="/static/curriculum/image/home1.jpg" style="width: 100%;height: 100%;position: absolute;top: 46px;z-index: -1;">
+<div class="incenter">
+    {% if request.user.is_active %}
 用户名 : {{ request.user.username }}
 <li><a href="{% url 'info_fill' %}">填写详细信息</a></li>
 <li><a href="{% url 'user_info' %}">个人信息</a></li>
@@ -15,11 +37,9 @@
 {% endif %}
 
 <div>
-    <a href="{% url 'all_series' %}">所有课程列表</a>
-    <a href="{% url 'mine' %}">我的</a>
-
-
+    <a href="{% url 'all_series' %}">课程列表</a>
+</div>
 
 </div>
-{% endblock %}
 
+{% endblock %}

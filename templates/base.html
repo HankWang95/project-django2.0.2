@@ -1,23 +1,90 @@
 <!DOCTYPE html>
 <html lang="zh_CN">
 <head>
-{% include 'head.html' %}
+    {% include 'head.html' %}
+    <title>{% block title %}欢迎光临 - hankwang{% endblock %}</title>
+    {% block js %}{% endblock %}
+    <meta charset="UTF-8">
+    <style type="text/css">
+        body,td,th {
+            font-family: Microsoft YaHei UI, sans-serif;
+            font-size: 16px;
+            color: #1d1007;
+            line-height:30px;
+        }
+        html,body,div,ul,
+        img{
+            padding: 0;
+            margin: 0;
+        }
+        .nav1{
+            height: 46px;
+            width: 100%;
+            line-height: 30px;
+            padding-left: 20px;
+            min-width: 1300px;
+            background-color: #0f0f0f;
+        }
+        section{
+            min-height: 600px;
+        }
+        footer{
+            background: #4CB4FE;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            min-width: 1300px;
+        }
+        #container{
+            width: 1250px;
+            min-height: 600px;
+            overflow: hidden;
+            margin: auto;
+            background: #4CB4FE;
+            padding-bottom: 10px;
+        }
+        .center{
+        width: 100%;
+            display: -webkit-flex;
+           -webkit-justify-content: center;
+           -webkit-align-items: center;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
 
-<title>{% block title %}欢迎光临 - hankwang{% endblock %}</title>
-{% block js %}{% endblock %}
+    </style>
+<script>
+    function tab() {
+        var url = window.location.href;
+        var str = url.substring(22,25);
+        var str1= url.substring(0,3);
+        if(str1=="htt"){
+            $("#uplo1").css("display","none");
+            if (str=="hom"){
+            $("#home1").addClass('active');
+        }else if (str=="pla"){
+            $("#play1").addClass('active');
+        }else if (str=="upl"){
+            $("#uplo1").addClass("active");
+        }else {
+            $("#home1").addClass("active");
+        }
+        }
+    }
+</script>
 </head>
-<body>
+<body onload="tab()">
+<div class="nav1">
 
-{% include 'navbar.html' %}
-<div class="container">
-{% block content %}
-
-{% endblock %}
+    {% include 'navbar.html' %}
 </div>
+    <section>
+        <div class="center">
+                      {% block content %}
 
+                      {% endblock %}
+        </div>
+    </section>
+<footer>版权所有</footer>
 </body>
-
-
-
 </html>
-{% block down %}{% endblock %}

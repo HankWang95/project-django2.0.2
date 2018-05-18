@@ -22,7 +22,7 @@ class Series(models.Model):
     number_of_participants = models.IntegerField(default=0, verbose_name='参加课程人数')
     approval_status = models.BooleanField(default=False)
     introduce = models.CharField(max_length=200, blank=True, null=True, verbose_name='系列简介')
-    tag = models.CharField(max_length=50, blank=True, null=True, verbose_name='标签，空格分割')
+    tag = models.CharField(max_length=50, blank=True, null=True, verbose_name='输入关键字，使用空格分割')
 
 
 # 未审核&审核未通过 课程模型

@@ -5,12 +5,13 @@
 {% block content %}
 {% if is_teacher %}
 <a href="{% url 'my_series_list' %}">我的系列课程</a>
-<a href="{% url 'add_series' %}">新建系列课程</a>
 
 {% else %}
 <a href="{% url 'my_series_list' %}">我参加的系列课程</a>
 
 {% endif %}
+<li><a href="{% url 'info_fill' %}">填写详细信息</a></li>
+<li><a href="{% url 'user_info' %}">个人信息</a></li>
 
 {% for i in list %}
 <a href="{% url 'play' i.series.id %}">{{ i.name }}</a>

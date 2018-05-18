@@ -7,14 +7,16 @@ from django.shortcuts import render, redirect
 # 我（参与）的系列课程列表 ： 老师与同学渲染不同界面
 def my_series_list_view(request):
     if Group.objects.get(user=request.user).name == 'teachers':
+        add = True
         list = Series.objects.all().filter(owner=request.user)
 
     else:
+        add = False
         q = CurriculumParticipation.objects.all().filter(student=request.user)
         list = []
         for i in q:
             list.append(i.series)
-    return render(request, 'curriculum/my_series_list.html', {'list': list})
+    return render(request, 'curriculum/my_series_list.html', {'list': list, 'add': add})
 
 
 # 系列展示页面 老师用户:向属于自己的系列中添加视频

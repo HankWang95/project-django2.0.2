@@ -8,12 +8,12 @@ from .models import StudentInfo, TeacherInfo
 def user_info_view(request):
     if Group.objects.get(user=request.user).name == 'students':
         try:
-            user_info = StudentInfo.objects.get(user=request.user)
+            user_info = StudentInfo.objects.all().filter(user=request.user)[0]
         except:
             return redirect('info_fill')
     else:
         try:
-            user_info = TeacherInfo.objects.get(user=request.user)
+            user_info = TeacherInfo.objects.all().filter(user=request.user)[0]
         except:
             return redirect('info_fill')
 
