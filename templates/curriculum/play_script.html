@@ -48,10 +48,20 @@
 
 
 <script>
+
+<!--ajax 视频选集-->
 $(document).ready(function(){
     $("button").click(function () {
         var id=$(this).attr("about")
         $("#play").load('/play_ajax_obj/'+id);
+        });
+});
+
+<!--爬虫-->
+$(document).ready(function(){
+    $("button").click(function () {
+        var id=$(this).attr("about")
+        $("#jd_book").load('/jd_book/'+id);
         });
 });
 </script>

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import upload, play, comment, my_series, all_series
+from . import upload, play, comment, my_series, all_series, spider
 
 urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')), django自带的用户表单
@@ -10,6 +10,8 @@ urlpatterns = [
     path('mine/', my_series.mine_view, name='mine'),
 
 
+
+
     path('all_series/', all_series.show_all_series_view, name='all_series'),
     path('show_series/<int:series>', all_series.show_series_view, name='show_series'),
     path('search/series/<int:kind>', all_series.show_series_view, name='search_series_for_kind'),
@@ -18,6 +20,7 @@ urlpatterns = [
     path('my/series/<int:series>/add/curriculum/', upload.add_curriculum_view, name='add_curriculum'),
 
 
+    path('jd_book/<slug:keyword>/', spider.spider, name='jd_book'),
     path('play_file_obj/<int:id>/', play.play_file_obj, name='play_file_obj'),
     path('play_ajax_obj/<int:id>/', play.play_ajax_obj, name='play_ajax_obj'),
     path('play/<int:series>/', play.play_view, name='play'),

@@ -17,12 +17,13 @@ class KindOfSeries(models.Model):
 # 系列模型
 class Series(models.Model):
     name = models.CharField(max_length=20)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Series_owner', default=User.objects.get(id=1).id)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Series_owner')
     kind = models.ForeignKey(KindOfSeries, on_delete=models.CASCADE, related_name='Series_kind', verbose_name='所属类型')
     number_of_participants = models.IntegerField(default=0, verbose_name='参加课程人数')
     approval_status = models.BooleanField(default=False)
     introduce = models.CharField(max_length=200, blank=True, null=True, verbose_name='系列简介')
     tag = models.CharField(max_length=50, blank=True, null=True, verbose_name='输入关键字，使用空格分割')
+    img = models.FilePathField(blank=True,null=True)
 
 
 # 未审核&审核未通过 课程模型
