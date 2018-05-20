@@ -3,15 +3,19 @@
 {% block title %}系列信息{% endblock %}
 
 {% block content %}
-{% if is_teacher %}
+
+{% if who == 'teachers' %}
 <a href="{% url 'my_series_list' %}">我的系列课程</a>
+<li><a href="{% url 'user_info' %}">个人信息</a></li>
+
+{% elif who == 'editors' %}
+<a href="{% url 'editor_index' %}">审核员通道</a>
 
 {% else %}
 <a href="{% url 'my_series_list' %}">我参加的系列课程</a>
+<li><a href="{% url 'user_info' %}">个人信息</a></li>
 
 {% endif %}
-<li><a href="{% url 'info_fill' %}">填写详细信息</a></li>
-<li><a href="{% url 'user_info' %}">个人信息</a></li>
 
 {% for i in list %}
 <a href="{% url 'play' i.series.id %}">{{ i.name }}</a>

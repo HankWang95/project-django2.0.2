@@ -34,7 +34,7 @@ def my_series_view(request, series):
         if have_series is not None:
             series = Series.objects.get(pk=series)
             # TODO: 加入审核后换为Curriculum库
-            curriculum_list = UnauditedCurriculum.objects.all().filter(series=series)
+            curriculum_list = Curriculum.objects.all().filter(series=series)
         else:
             return redirect('my_series_list')
         return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': False})
@@ -56,8 +56,9 @@ def join_series_view(request, series):
 
 # "我的" 渲染界面
 def mine_view(request):
+    who = ""
     if Group.objects.get(user=request.user).name == 'teachers':
-        is_teacher = True
-    else:
-        is_teacher = False
-    return render(request, 'curriculum/mine.html',{'is_teacher': is_teacher})
+        who = "teachers"
+    elif Group.objects.get(user=request.user).name == 'editors':
+        who = "editors"
+    return render(request, 'curriculum/mine.html',{'who': who})

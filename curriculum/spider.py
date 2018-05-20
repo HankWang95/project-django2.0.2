@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Series
 from lxml import etree
 import requests
 
@@ -7,7 +8,10 @@ import requests
 def jd_seach(keywords):
     keyword = ""
     for i in keywords:
-        keyword += i + "%20"
+        if i == '#':
+            keyword += '%20'
+        else:
+            keyword += i
     url = "https://search.jd.com/Search?keyword=" + keyword + "&enc=utf-8&"
     print(url)
     return url
@@ -42,7 +46,8 @@ def xpath_select(html, xpath_list, img_xpath_list):
     return obj_list
 
 
-def spider(request, keyword):
+def spider(request, id):
+    keywords = Series.objects.get(pk=id).tag
     xpath_list = []
     img_xpath_list = []
     for i in range(3):
@@ -50,7 +55,7 @@ def spider(request, keyword):
         xpath_list.append(xpath)
         img_xpath = '//*[@id="J_goodsList"]/ul/li[' + str(i + 1) + ']/div/div[1]/a/img'
         img_xpath_list.append(img_xpath)
-    url = jd_seach(keyword)
+    url = jd_seach(keywords)
     html = req_url(url)
     obj_list = xpath_select(html, xpath_list, img_xpath_list)
     return render(request, "curriculum/spider.html", {'obj_list': obj_list})

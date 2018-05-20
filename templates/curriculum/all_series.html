@@ -4,8 +4,16 @@
 
 {% block content %}
 
+{% if editor %}
+
+{% for i in series_list %}
+<li><a href="{% url 'editor_cur_list' i.id %}">{{ i.name }}</a></li>
+{% endfor %}
+
+{% else %}
 {% for i in series_list %}
 <li><a href="{% url 'show_series' i.id %}">{{ i.name }}</a></li>
-
 {% endfor %}
+
+{% endif %}
 {% endblock %}

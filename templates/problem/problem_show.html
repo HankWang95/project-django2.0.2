@@ -1,0 +1,15 @@
+
+{% block content %}
+{{ problem.number }}
+{{ problem.name }}
+{{ problem.tag }}
+{{ problem.description }}
+{{ problem.input_description }}
+{{ problem.output_description }}
+{{ problem.input_sample }}
+{{ problem.output_sample }}
+{{ problem.time }}
+{{ problem.memory }}
+<a href="{% url 'code_commit' problem.id %}">编写代码</a>
+<a href="{% url 'add_case' problem.id %}">添加测试样例</a>
+{% endblock %}

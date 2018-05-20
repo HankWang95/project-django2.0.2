@@ -10,7 +10,7 @@ Your browser does not support the video tag.
 
 </div>
 {% for i in cur_list %}
-<button about="{{ i.id }}" id="but{{ forloop.counter }}">{{ i.name }}</button>
+<button onclick="loadXMLDoc({{ i.id }})" id="but{{ forloop.counter }}" >{{ i.name }}</button>
 {% endfor %}
 
 <div id="msgBox" onload="tab()">
@@ -37,6 +37,7 @@ Your browser does not support the video tag.
         {% endfor %}
     </div>
 </div>
+<br>
 <div id="jd_book"></div>
 
 {% endblock %}

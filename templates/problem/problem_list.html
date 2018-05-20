@@ -1,0 +1,11 @@
+
+
+{% block title %}题目列表{% endblock %}
+
+{% block content %}
+
+{% for i in list %}
+<li><a href="{% url 'problem_show' i.id %}">{{ i.name }}</a></li>
+{% endfor %}
+
+{% endblock %}

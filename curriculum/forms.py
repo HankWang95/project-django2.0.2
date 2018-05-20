@@ -13,6 +13,8 @@ class AddCurriculumForm(ModelForm):
         fields = ['name', 'number']
 
 
+
+
 # 添加系列课程表单
 class AddSeriesForm(ModelForm):
 

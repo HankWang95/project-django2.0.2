@@ -1,0 +1,22 @@
+{% extends "curriculum/editor/editor_script.html" %}
+
+{% block content %}
+<h1>播放&审核</h1>
+<div id="play">
+<video width="320" height="240" controls="controls">
+  <source src="" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+
+</div>
+{% for i in cur_list %}
+<a href="{% url 'editor_determine' status=1 cur_id=i.id %}">通过审核</a>
+<a href="{% url 'editor_determine' status=0 cur_id=i.id %}">未通过审核</a>
+
+<button about="{{ i.id }}" id="but{{ i.id }}">{{ i.name }}</button>
+{% endfor %}
+
+
+
+{% endblock %}

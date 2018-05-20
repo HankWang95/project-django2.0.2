@@ -14,21 +14,21 @@ class KindOfSeries(models.Model):
         return self.name
 
 
-# 系列模型
+# 所有系列
 class Series(models.Model):
     name = models.CharField(max_length=20)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Series_owner')
     kind = models.ForeignKey(KindOfSeries, on_delete=models.CASCADE, related_name='Series_kind', verbose_name='所属类型')
     number_of_participants = models.IntegerField(default=0, verbose_name='参加课程人数')
-    approval_status = models.BooleanField(default=False)
+    checked = models.BooleanField(default=False)
     introduce = models.CharField(max_length=200, blank=True, null=True, verbose_name='系列简介')
     tag = models.CharField(max_length=50, blank=True, null=True, verbose_name='输入关键字，使用空格分割')
     img = models.FilePathField(blank=True,null=True)
+    path = models.FilePathField()
 
 
-# 未审核&审核未通过 课程模型
+# 用户上传的 所有课程
 class UnauditedCurriculum(models.Model):
-    editor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UnauditedCurriculum_editor', blank=True, null=True)
     created_time = models.DateTimeField(default=now)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UnauditedCurriculum_owner')
     name = models.CharField(max_length=50, verbose_name='课程名')
@@ -36,13 +36,14 @@ class UnauditedCurriculum(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE, related_name='UnauditedCurriculum_series')
     number = models.IntegerField(verbose_name='集数')
     attachment = models.FilePathField(blank=True, null=True, verbose_name='附件文件')
-    approval_status = models.BooleanField(default=False)
+    checked = models.BooleanField(default=False)
+    editor = models.ForeignKey(User, blank=True, null=True, related_name='UnauditedCurriculum_editor',on_delete=models.CASCADE)
 
     class Meta:
         # permissions 会在数据库创建属于该模块的一个自定义权限
         permissions = (
             ('upload_file', '可以上传文件'),
-            ('move_video', '移动视频所在库'),
+            ('editor', '审核员权限'),
         )
         ordering = ['number']
 
@@ -53,14 +54,15 @@ class Curriculum(models.Model):
                                null=True)
     created_time = models.DateTimeField(default=now)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Curriculum_owner')
-    file_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='课程名')
     path = models.FilePathField()
     series = models.ForeignKey(Series, on_delete=models.CASCADE, related_name='Curriculum_series')
     number = models.IntegerField(verbose_name='集数')
-    attachment = models.FilePathField()
+    attachment = models.FilePathField(blank=True,null=True, verbose_name='附件')
+    img = models.FilePathField(blank=True, null=True)
 
 
-# 存储评论
+# 评论（按系列）
 class Comment(models.Model):
     body = models.TextField('正文', max_length=300)
     created_time = models.DateTimeField('创建时间', default=now)
@@ -82,7 +84,15 @@ class Comment(models.Model):
         super().save(*args, **kwargs)
 
 
+# 学生选课情况
 class CurriculumParticipation(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     curriculum = models.IntegerField(default=1)
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
+
+
+# 审核未通过的视频
+class UnPassCurriculum(models.Model):
+    curriculum = models.ForeignKey(UnauditedCurriculum, on_delete=models.CASCADE, related_name='UnPassCurriculum_curriculum')
+    editor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UnPassCurriculum_editor')
+
