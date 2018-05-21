@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import ProblemForm
 from .models import Problem
 
-def problem_add(request):
+
+
+def problem_add(request,series):
     if request.method == 'POST':
         form = ProblemForm(request.POST)
         if form.is_valid():
@@ -26,11 +28,14 @@ def problem_add(request):
                 input_sample = input_sample,
                 output_sample = output_sample,
                 time = time,
-                memory = memory)
+                memory = memory,
+                series=series,
+                owner = request.user
+            )
             new_problem.save()
+            return redirect('problem_list', series)
         else:
             return render(request, 'problem/problem.html', {'form': form})
-        return redirect('add_problem')
     else:
         form = ProblemForm()
         return render(request, 'problem/problem.html', {'form': form})

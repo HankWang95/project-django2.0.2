@@ -1,11 +1,12 @@
-<head>
-<title>
-测试用例增加
-</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}增加测试用例{% endblock %}
+
+{% block content %}
 <form action="" method="post">
 {% csrf_token %}
 {{ form.as_p }}
 <button type="submit">增加</button>
 </form>
+
+{% endblock %}

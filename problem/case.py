@@ -32,9 +32,9 @@ def case_add(request, id):
             output_command = "echo '"+output_case+"' > "+filename+".out"
             os.system(input_command)
             os.system(output_command)
+            return redirect('problem_show', id)
         else:
             return render(request, 'problem/testcase.html', {'form':form})
-        return redirect('add_case', id)
     else:
         form = CaseForm()
         return render(request, 'problem/testcase.html', {'form':form})

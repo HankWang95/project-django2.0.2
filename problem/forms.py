@@ -1,6 +1,7 @@
 from django import forms
 from .models import Problem
 
+
 class ProblemForm(forms.Form):
     number = forms.CharField(label='题目编号')
     name = forms.CharField(label='题目名字')
@@ -12,7 +13,9 @@ class ProblemForm(forms.Form):
     output_sample = forms.CharField(label='输出样例')
     time = forms.IntegerField(label='时间限制')
     memory = forms.IntegerField(label='内存限制')
-    
+
+
+
 class CodeForm(forms.Form):
     code = forms.CharField(widget=forms.Textarea(),initial="请在此处编码")
     LANGUAGE_CHOICES= (

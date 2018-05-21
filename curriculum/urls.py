@@ -13,7 +13,7 @@ urlpatterns = [
     # 课程 URL
     path('all_series/', all_series.show_all_series_view, name='all_series'),
     path('show_series/<int:series>', all_series.show_series_view, name='show_series'),
-    path('search/series/<int:kind>', all_series.show_series_view, name='search_series_for_kind'),
+    path('search/series/<int:kind>', all_series.search_series_for_kind_view, name='search_series_for_kind'),
 
     path('series/add/', upload.add_series_view, name='add_series'),
     path('my/series/<int:series>/add/curriculum/', upload.add_curriculum_view, name='add_curriculum'),

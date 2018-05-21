@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block title %}题目信息{% endblock %}
+
 
 {% block content %}
 {{ problem.number }}
@@ -10,6 +14,11 @@
 {{ problem.output_sample }}
 {{ problem.time }}
 {{ problem.memory }}
-<a href="{% url 'code_commit' problem.id %}">编写代码</a>
+{% if add %}
 <a href="{% url 'add_case' problem.id %}">添加测试样例</a>
+{% else %}
+<a href="{% url 'commit' problem.id %}">编写代码</a>
+{% endif %}
+
+
 {% endblock %}

@@ -1,39 +1,55 @@
+#coding:utf-8
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from .forms import ProblemForm, CodeForm
 from .models import Problem
 import os
-import subprocess
+import json
 
 CODE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_dir')
 
-def problem_list(request):
-    problem_list = Problem.objects.all()
+
+# 题目列表
+def problem_list(request,series):
+    problem_list = Problem.objects.all().filter(series=series)
+    add = False
+    user = request.user
+    if problem_list[0].owner == user:
+        add = True
     '''listt = []
     for obj in problem_list:
         if obj.series not in list:
             list.append(obj.series)'''
-    return render(request, 'problem/problem_list.html', {'list':problem_list})
+    return render(request, 'problem/problem_list.html', {'list':problem_list,
+                                                         'add': add,
+                                                         'series': series})
 
+
+# 题目信息展示
 def problem_show(request, id):
-    problem = Problem.objects.get(id = id) 
-    return render(request, 'problem/problem_show.html', {'problem':problem})
+    problem = Problem.objects.get(id=id)
+    add = False
+    if problem.owner == request.user:
+        add = True
+    return render(request, 'problem/problem_show.html', {'problem':problem, 'add': add})
+
 
 def judge_pass(request):
     return HttpResponse(u'评判通过') 
 
+
 def judge_unpass(request):
     return HttpResponse(u'评判未通过') 
 
-def judge_compileError(request):
-    return HttpResponse(u'编译错误')
 
 def judge_timeExceeded(request):
     return HttpResponse(u'超时')
 
+
 def judge_memoryExceeded(request):
     return HttpResponse(u'内存限制')
+
 
 def code_judge(request, id):
     if request.method == 'POST':
@@ -42,7 +58,6 @@ def code_judge(request, id):
         if form.is_valid():
             code = form.cleaned_data['code']
             language_choice  = form.cleaned_data['lang_choice']
-            #number = str(form.cleaned_data['number'])
             language_dict = {
                 'C': 'c',
                 'C++': 'cpp',
@@ -50,7 +65,6 @@ def code_judge(request, id):
                 'Python': 'py'}                
             language = 'test.'+language_dict.get(language_choice)
 
-            #DIR = os.path.join(CODE_DIR, number)
             DIR = os.path.join(CODE_DIR, str(id))
             count = 0
             for fn in os.listdir(DIR):
@@ -68,27 +82,26 @@ def code_judge(request, id):
                 command = command + ' --testcase --input '+inputcase+' --output '+outputcase
                 i += 1
             #command = 'ljudge --user-code test.cpp --testcase --input 1.in --output 1.out --testcase --input 2.in --output 2.out' 
-            #result = os.popen(command).read()
-            p = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE)
-            out, err = p.communicate()
-            result = str(out)
+            jsonresult = os.popen(command).read()
+            result = json.loads(jsonresult)
+            with open('result','w+') as f:
+                f.write(str(result))
             os.unlink(filename)
-            #with open('result', 'w+') as f:
-                #f.write(result)
-            if 'false' in result:
-                return redirect(reverse(judge_compileError))
-            else:
-                if 'WRONG_ANSWER' in result:
+            if not result['compilation']['success']:
+                compile_error = result['compilation']['log'].splitlines()
+                return render(request, 'problem/compileError.html', {'list':compile_error})
+
+            for i in result['testcases']:
+                if 'WRONG_ANSWER' in i['result']:
                     return redirect(reverse(judge_unpass))
-                elif '"TIME_LIMIT_EXCEEDED"' in result:
+            for i in result['testcases']:
+                if 'TIME_LIMIT_EXCEEDED' in i['result']:
                     return redirect(reverse(judge_timeExceeded))
-                elif '"MEMORY_LIMIT_EXCEEDED"' in result:
+                if 'MEMORY_LIMIT_EXCEEDED' in i['result']:
                     return redirect(reverse(judge_memoryExceeded))
-                else:
-                    return redirect(reverse(judge_pass))
+            return redirect(reverse(judge_pass))
         else:
             return render(request, 'problem/commit.html', {'form': form})
-        return redirect('code_judge')
     else:
         form = CodeForm()
-        return render(request, 'problem/commit.html', {'form': form})
+        return render(request, 'problem/commit.html', {'form': form, 'id':id})

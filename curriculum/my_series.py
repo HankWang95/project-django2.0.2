@@ -27,7 +27,7 @@ def my_series_view(request, series):
             return redirect('my_series_list')
         else:
             curriculum_list = UnauditedCurriculum.objects.all().filter(series=series)
-            return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': True, 'series': series.id})
+            return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': True, 'series': series})
     else:
         # series = Series.objects.get(pk=series)
         have_series = CurriculumParticipation.objects.all().filter(series=series, student=request.user)
@@ -37,7 +37,7 @@ def my_series_view(request, series):
             curriculum_list = Curriculum.objects.all().filter(series=series)
         else:
             return redirect('my_series_list')
-        return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': False})
+        return render(request, 'curriculum/my_series.html', {'list': curriculum_list, 'add': False, 'series':series.id})
 
 
 # 参加 series
@@ -49,6 +49,8 @@ def join_series_view(request, series):
     if series is not None:
         new = CurriculumParticipation(student=user, series=series)
         new.save()
+        series.number_of_participants = series.number_of_participants + 1
+        series.save()
         return redirect('my_series',series.id)
     else:
         return redirect('my_series_list')

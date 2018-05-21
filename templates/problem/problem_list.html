@@ -1,11 +1,17 @@
-
+{% extends "base.html" %}
 
 {% block title %}题目列表{% endblock %}
 
 {% block content %}
 
 {% for i in list %}
-<li><a href="{% url 'problem_show' i.id %}">{{ i.name }}</a></li>
-{% endfor %}
+<a href = "{% url 'problem_show' i.id %}">题目编号:{{ i.number }}题目名字:{{ i.name }}</a>
+{% if add %}
+<a href = "{% url 'problem_delete' i.id %}">删除题目</a><br>
 
+{% endif %}
+{% endfor %}
+{% if add %}
+<a href = "{% url 'add_problem' series %}">增加题目</a><br>
+{% endif %}
 {% endblock %}
